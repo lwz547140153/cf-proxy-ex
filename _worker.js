@@ -14,7 +14,7 @@ const password = "";
 const showPasswordPage = true;
 const replaceUrlObj = "__location__yproxy__";
 
-const GITHUB_RES_REGEXP = /^(https:\/\/github.com\/[^\s'"]+\/[^\s'"]+\/)(blob|tree)(\/[^\s'"]+)$/gi
+const GITHUB_RES_REGEXP = /^(https:\/\/github.com\/[^\s'"]+\/[^\s'"]+\/)blob(\/[^\s'"]+)$/gi
 
 var thisProxyServerUrlHttps;
 var thisProxyServerUrl_hostOnly;
