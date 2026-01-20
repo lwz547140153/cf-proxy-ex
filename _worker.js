@@ -14,7 +14,7 @@ const password = "";
 const showPasswordPage = true;
 const replaceUrlObj = "__location__yproxy__";
 
-const GITHUB_RES_REGEXP = /^(https:\/\/github.com\/[^\s'"]+\/[^\s'"]+\/)(blob)(\/[^\s'"]+)$/gi
+const GITHUB_RES_REGEXP = /^(https:\/\/github.com\/[^\/\s'"]+\/[^\/\s'"]+\/)(blob)(\/[^\/\s'"]+)$/gi
 
 var thisProxyServerUrlHttps;
 var thisProxyServerUrl_hostOnly;
@@ -1048,7 +1048,7 @@ async function handleRequest(request) {
   //handle github's resource url like 'https://github.com/{usr}/{proj}/blob/{file}' and 'https://github.com/{usr}/{proj}/tree/{file}'
   // redirect to 'https://github.com/{usr}/{proj}/raw/refs/heads/main/{file}'(https://raw.githubusercontent.com/{usr}/{proj}/refs/heads/main/{file})
   if(GITHUB_RES_REGEXP.test(actualUrlStr)){
-    //TODO redirect res url only
+    //redirect blob res url only,not redirect tree res
       return getRedirect(thisProxyServerUrlHttps + actualUrlStr.replace(GITHUB_RES_REGEXP,'$1raw/refs/heads$3'));
   }
 
