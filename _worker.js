@@ -14,6 +14,8 @@ const password = "";
 const showPasswordPage = true;
 const replaceUrlObj = "__location__yproxy__";
 
+const REGEXP_GITHUB_RES = /^(https:\/\/github.com\/[^\s'"]+\/[^\s'"]+\/)(blob|tree)(\/[^\s'"]+)$/gi
+
 var thisProxyServerUrlHttps;
 var thisProxyServerUrl_hostOnly;
 // const CSSReplace = ["https://", "http://"];
@@ -1042,7 +1044,12 @@ async function handleRequest(request) {
   if (actualUrlStr != actualUrl.href) return getRedirect(thisProxyServerUrlHttps + actualUrl.href);
 
 
-
+  
+  //handle github's resource url like 'https://github.com/{usr}/{proj}/blob/{file}' and 'https://github.com/{usr}/{proj}/tree/{file}'
+  // redirect to 'https://github.com/{usr}/{proj}/raw/refs/heads/main/{file}'(https://raw.githubusercontent.com/{usr}/{proj}/refs/heads/main/{file})
+  if(regex.test(actualUrlStr)){
+      actualUrlStr=REGEXP_GITHUB_RES.replace(regex,'$1raw/refs/heads$3');
+  }
 
   // =======================================================================================
   // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* 处理客户端发来的 Header *-*-*-*-*-*-*-*-*-*-*-*-*
@@ -1550,12 +1557,6 @@ function getHTMLResponse(html) {
 }
 
 function getRedirect(url) {
-  //handle github's resource url like 'https://github.com/{usr}/{proj}/blob/{file}' and 'https://github.com/{usr}/{proj}/tree/{file}'
-  // redirect to 'https://github.com/{usr}/{proj}/raw/refs/heads/main/{file}'(https://raw.githubusercontent.com/{usr}/{proj}/refs/heads/main/{file})
-  let regex = /^(https:\/\/github.com\/[^\s'"]+\/[^\s'"]+\/)(blob|tree)(\/[^\s'"]+)$/gi
-  if(regex.test(url)){
-      url=url.replace(regex,'$1raw/refs/heads$3');
-  }
   return Response.redirect(url, 301);
 }
 
